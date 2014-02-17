@@ -1,0 +1,48 @@
+Name:            data-default-generics
+Version:         0.3
+Cabal-Version:   >= 1.6
+Category:        Data
+Synopsis:        A class for types with a default value
+Build-Type:      Simple
+License:         BSD3
+License-File:    LICENSE
+Author:          Lukas Mai 2011-2013, Jonathan Fischoff 2013, João Cristóvão 2013
+Maintainer:      <l.mai@web.de>, <jmacristovao@gmail.com>
+
+--source-repository head
+  --type: git
+  --location: https://github.com/mauke/data-default
+
+Library
+  Build-Depends:     base >=2 && <5
+                   , containers
+                   , dlist
+                   , old-locale
+                   , time >= 1.4.0.1
+                   , ghc-prim
+                   , text
+                   , bytestring
+                   , containers
+                   , unordered-containers
+                   , vector > 0.10
+  Exposed-Modules:   Data.Default.Generics
+  Ghc-Options:       -Wall -O2
+  hs-source-dirs:    src
+
+test-suite test
+  type:             exitcode-stdio-1.0
+  main-is:          main.hs
+  hs-source-dirs:   test,src
+  build-depends:    base >=2
+                  , containers
+                  , dlist
+                  , old-locale
+                  , time >= 1.4.0.1
+                  , ghc-prim
+                  , text
+                  , bytestring
+                  , containers
+                  , unordered-containers
+                  , vector > 0.10
+                  , hspec
+                  , HUnit
