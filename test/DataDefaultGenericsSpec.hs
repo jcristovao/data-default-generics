@@ -1,5 +1,4 @@
-{-# LANGUAGE NoMonomorphismRestriction #-}
-{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE DeriveGeneric       #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module DataDefaultGenericsSpec where
@@ -39,6 +38,25 @@ import Data.Time.LocalTime
 import Data.Default.Generics
 
 import Test.Hspec
+
+data TestRec = TestRec
+  { bool    :: Bool
+  , txt     :: T.Text
+  , bs      :: BSL.ByteString
+  , lst     :: [CInt]
+  , ut      :: UTCTime
+  } deriving (Eq,Show,Generic)
+
+instance Default TestRec
+
+data TestList = Cons Int TestList | Nil
+  deriving (Eq,Show,Generic)
+
+{-data TestList2 = Cons2 Int String TestList2 | Nil2-}
+  {-deriving (Eq,Show,Generic)-}
+
+instance Default TestList
+{-instance Default TestList2-}
 
 
 {-# ANN spec ("HLint: ignore Too strict if"::String) #-}
@@ -148,3 +166,8 @@ spec = describe "DataDefaultGenerics" $ do
   {-it "UniversalTime"   $ (def :: UniversalTime) `shouldBe` ModJulianDate 0-}
   it "DiffTime"        $ (def :: DiffTime)      `shouldBe` secondsToDiffTime 0
   it "UTCTime"         $ (def :: UTCTime)       `shouldBe` UTCTime def 0
+
+  -- Record
+  it "Record" $ (def :: TestRec) `shouldBe` TestRec False "" "" [] (UTCTime def 0)
+
+  it "Recursive Record" $ (def :: TestList) `shouldBe` Nil

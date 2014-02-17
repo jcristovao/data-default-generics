@@ -33,6 +33,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 {-# LANGUAGE FlexibleContexts     #-}
 {-# LANGUAGE TypeSynonymInstances #-}
 {-# LANGUAGE FlexibleInstances    #-}
+{-# LANGUAGE DataKinds            #-}
+{-# LANGUAGE UndecidableInstances #-}
+{-# LANGUAGE TypeFamilies         #-}
 module Data.Default.Generics (
 -- | This module defines a class for types with a default value. Instances are
 -- provided for '()', 'S.Set', 'M.Map', 'Int', 'Integer', 'Float', 'Double',
@@ -225,6 +228,41 @@ instance (Default a) => GDefault (K1 i a) where
 instance (GDefault a, GDefault b) => GDefault (a :*: b) where
    gDef = gDef :*: gDef
 
-instance (GDefault a, GDefault b) => GDefault (a :+: b) where
-   gDef = L1 gDef
+{-instance (GDefault a, GDefault b) => GDefault (a :+: b) where-}
+  {-gDef = L1 gDef-}
 
+instance (GDefault a, GDefault b) => GDefault (a :+: b) where
+   gDef = if hasRec' (gDef :: a) then R1 gDef else L1 gDef
+
+--------------------------------------------------------------------------------
+-- | We use 'HasRec' to check for recursion in the structure. This is used
+-- to avoid selecting a recursive branch in the sum case for 'Empty'.
+class HasRec a where
+  hasRec' :: a -> Bool
+  hasRec' _ = False
+
+instance HasRec (V1 p)
+instance HasRec (U1 p)
+instance HasRec (M1 i c f p)
+
+instance (HasRec a, HasRec b, HasRec (r a p), HasRec (r b p))
+  => HasRec (((r a) :+: (r b)) p) where
+  hasRec' (L1 x) = hasRec' x
+  hasRec' (R1 x) = hasRec' x
+  {-hasRec' (L1 (r x)) = hasRec' x-}
+
+instance (HasRec a, HasRec b, HasRec (r a p), HasRec (r b p))
+  => HasRec (((r a) :*: (r b)) p) where
+  hasRec' (a :*: b) = hasRec' a || hasRec' b
+
+instance (HasRec a) => HasRec (K1 i a x) where
+  hasRec' (K1 x) = hasRec' x
+
+instance (HasRec a) => HasRec (Rec0 a x) where
+  hasRec' (K1 _) = True
+
+instance HasRec Int
+instance HasRec Integer
+instance HasRec Float
+instance HasRec Double
+instance HasRec Char
