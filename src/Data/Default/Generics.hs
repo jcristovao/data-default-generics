@@ -231,7 +231,7 @@ instance (GDefault a, GDefault b) => GDefault (a :*: b) where
 {-instance (GDefault a, GDefault b) => GDefault (a :+: b) where-}
   {-gDef = L1 gDef-}
 
-instance (GDefault a, GDefault b) => GDefault (a :+: b) where
+instance (HasRec a, GDefault a, GDefault b) => GDefault (a :+: b) where
    gDef = if hasRec' (gDef :: a) then R1 gDef else L1 gDef
 
 --------------------------------------------------------------------------------
