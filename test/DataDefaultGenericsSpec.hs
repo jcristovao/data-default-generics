@@ -3,8 +3,6 @@
 
 module DataDefaultGenericsSpec where
 
-import Data.Int
-import Data.Word
 import Data.Fixed
 import Foreign.C.Types
 import Data.Monoid
@@ -49,15 +47,11 @@ data TestRec = TestRec
 
 instance Default TestRec
 
-data TestList = Cons Int TestList | Nil
-  deriving (Eq,Show,Generic)
-
-{-data TestList2 = Cons2 Int String TestList2 | Nil2-}
-  {-deriving (Eq,Show,Generic)-}
-
+data TestList = Cons Int TestList | Nil deriving (Eq,Show,Generic)
 instance Default TestList
-{-instance Default TestList2-}
 
+data TestList2 = Nil2 | Cons2 Int TestList2 deriving (Eq,Show,Generic)
+instance Default TestList2
 
 {-# ANN spec ("HLint: ignore Too strict if"::String) #-}
 spec :: Spec
@@ -169,5 +163,5 @@ spec = describe "DataDefaultGenerics" $ do
 
   -- Record
   it "Record" $ (def :: TestRec) `shouldBe` TestRec False "" "" [] (UTCTime def 0)
-
-  it "Recursive Record" $ (def :: TestList) `shouldBe` Nil
+  it "Recursive Record (left)"  $ (def :: TestList)  `shouldBe` Nil
+  it "Recursive Record (right)" $ (def :: TestList2) `shouldBe` Nil2
