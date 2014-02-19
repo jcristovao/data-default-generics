@@ -9,7 +9,7 @@ with the following additions:
 * Regrouped everything in a [single module](https://github.com/mauke/data-default/commit/312844532f3c3c79fc5b0e911bffa74baf24b2f7#commitcomment-3989849)
 * Added several instances, namely Either, Text, ByteString, etc
 * Added Generics support by [Jonathan Fischoff](https://github.com/mauke/data-default/pull/4), 
-  with some additional support for recursive structure by me, with the precious help of [José Pedro Magalhães](http://dreixel.net/)
+  with some additional support for recursive datatypes by me, with the precious help of [José Pedro Magalhães](http://dreixel.net/)
   
 It should be usable as a drop-in replacement.  
 
