@@ -1,6 +1,7 @@
 {-
 
 Copyright (c) 2010, 2012 Lukas Mai
+              2013, 2014 Jonathan Fischoff, João Cristóvão
 
 All rights reserved.
 
@@ -228,9 +229,6 @@ instance (Default a) => GDefault (K1 i a) where
 
 instance (GDefault a, GDefault b) => GDefault (a :*: b) where
    gDef = gDef :*: gDef
-
-{-instance (GDefault a, GDefault b) => GDefault (a :+: b) where-}
-  {-gDef = L1 gDef-}
 
 instance (HasRec a, GDefault a, GDefault b) => GDefault (a :+: b) where
    gDef = if hasRec' (gDef :: a p) then R1 gDef else L1 gDef
