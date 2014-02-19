@@ -37,6 +37,7 @@ Modify the previous to:
 
 (...)
 import Data.Default.Generics
+import GHC.Generics
 (...)
 
 data TestRec = TestRec
