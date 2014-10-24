@@ -42,7 +42,7 @@ module Data.Default.Generics (
 -- | This module defines a class for types with a default value. Instances are
 -- provided for '()', 'S.Set', 'M.Map', 'Int', 'Integer', 'Float', 'Double',
 -- and many others (see below).
-    Default(..)
+    Default(..), genericDefault
 ) where
 
 import Data.Int
@@ -79,12 +79,17 @@ import Data.Time.Calendar
 import Data.Time.Clock
 import Data.Time.LocalTime
 
+-- | Generic default value. Useful when creating your own instance of Default
+-- with only few values different.
+genericDefault :: (Generic a, GDefault (Rep a)) => a
+genericDefault = to gDef
+
 -- | A class for types with a default value.
 class Default a where
     -- | The default value for this type.
     def :: a
     default def :: (Generic a, GDefault (Rep a)) => a
-    def = to gDef
+    def = genericDefault
 
 instance Default Bool where def = False
 
