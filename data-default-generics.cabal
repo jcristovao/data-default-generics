@@ -1,5 +1,5 @@
 Name:            data-default-generics
-Version:         0.3
+Version:         0.3.1
 Cabal-Version:   >= 1.10
 Category:        Data
 Synopsis:        A class for types with a default value
